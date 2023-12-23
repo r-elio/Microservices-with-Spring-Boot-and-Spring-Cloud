@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+mkdir -p microservices
+cd microservices
+
 spring init \
 --boot-version=3.2.1 \
 --type=gradle-project \
@@ -47,3 +50,5 @@ spring init \
 --dependencies=actuator,webflux \
 --version=1.0.0-SNAPSHOT \
 product-composite-service
+
+cd ..
