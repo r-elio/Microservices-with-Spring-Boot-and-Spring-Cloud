@@ -5,4 +5,13 @@ server:
 logging:
     level:
         root: INFO
-        re.elio: DEBUG
+        '[re.elio]': DEBUG
+
+---
+
+spring:
+    config:
+        activate:
+            on-profile: docker
+server:
+    port: 8080
