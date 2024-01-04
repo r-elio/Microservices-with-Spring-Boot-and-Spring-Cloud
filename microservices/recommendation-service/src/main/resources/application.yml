@@ -1,17 +1,27 @@
 server:
-    port: 7002
-    error:
-        include-message: always
+  port: 7002
+  error:
+    include-message: always
 logging:
-    level:
-        root: INFO
-        '[re.elio]': DEBUG
+  level:
+    root: INFO
+    '[re.elio]': DEBUG
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: recommendation-db
 
 ---
 
 spring:
-    config:
-        activate:
-            on-profile: docker
+  config:
+    activate:
+      on-profile: docker
+  data:
+    mongodb:
+      host: mongodb
 server:
-    port: 8080
+  port: 8080

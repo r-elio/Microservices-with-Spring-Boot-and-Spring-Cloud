@@ -1,17 +1,33 @@
 server:
-    port: 7003
-    error:
-        include-message: always
+  port: 7003
+  error:
+    include-message: always
 logging:
-    level:
-        root: INFO
-        '[re.elio]': DEBUG
+  level:
+    root: INFO
+    '[re.elio]': DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+# Strongly recommend to set this property to "none" in a production environment!
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://localhost/review-db
+    username: user
+    password: pwd
+    hikari:
+      initializationFailTimeout: 60000
 
 ---
 
 spring:
-    config:
-        activate:
-            on-profile: docker
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:mysql://mysql/review-db
 server:
-    port: 8080
+  port: 8080
+

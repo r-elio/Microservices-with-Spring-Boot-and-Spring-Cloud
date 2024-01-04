@@ -1,8 +1,5 @@
 package re.elio.util.http;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -11,9 +8,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
+import re.elio.api.exceptions.BadRequestException;
 import re.elio.api.exceptions.InvalidInputException;
 import re.elio.api.exceptions.NotFoundException;
+
+import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 class GlobalControllerExceptionHandler {
@@ -29,6 +28,12 @@ class GlobalControllerExceptionHandler {
     @ExceptionHandler(InvalidInputException.class)
     public @ResponseBody HttpErrorInfo handleInvalidInputException(ServerHttpRequest request, InvalidInputException ex) {
         return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
+    }
+
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(BadRequestException.class)
+    public @ResponseBody HttpErrorInfo handleBadRequestExceptions(ServerHttpRequest request, BadRequestException ex) {
+        return createHttpErrorInfo(BAD_REQUEST, request, ex);
     }
 
     private HttpErrorInfo createHttpErrorInfo(HttpStatus httpStatus, ServerHttpRequest request, Exception ex) {
