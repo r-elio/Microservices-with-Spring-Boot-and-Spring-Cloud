@@ -1,12 +1,12 @@
 package re.elio.util.http;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 @Component
 public class ServiceUtil {
@@ -19,7 +19,8 @@ public class ServiceUtil {
     }
 
     public String getServiceAddress() {
-        if (serviceAddress == null) serviceAddress = String.format("%s/%s:%s", findMyHostname(), findMyIpAddress(), port);
+        if (serviceAddress == null)
+            serviceAddress = String.format("%s/%s:%s", findMyHostname(), findMyIpAddress(), port);
         LOG.debug("serviceAddress: {}", serviceAddress);
         return serviceAddress;
     }

@@ -1,8 +1,8 @@
 package re.elio.util.http;
 
-import java.time.ZonedDateTime;
-
 import org.springframework.http.HttpStatus;
+
+import java.time.ZonedDateTime;
 
 public class HttpErrorInfo {
     private final ZonedDateTime timestamp;

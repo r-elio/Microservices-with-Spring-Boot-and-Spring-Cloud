@@ -7,7 +7,7 @@ group = 're.elio.microservices.api'
 version = '1.0.0-SNAPSHOT'
 
 java {
-	sourceCompatibility = '17'
+    sourceCompatibility = '17'
 }
 
 repositories {

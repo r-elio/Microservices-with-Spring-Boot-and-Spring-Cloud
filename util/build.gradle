@@ -7,7 +7,7 @@ group = 're.elio.microservices.util'
 version = '1.0.0-SNAPSHOT'
 
 java {
-	sourceCompatibility = '17'
+    sourceCompatibility = '17'
 }
 
 repositories {
@@ -20,7 +20,7 @@ ext {
 
 dependencies {
     implementation project(':api')
-    
+
     implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
