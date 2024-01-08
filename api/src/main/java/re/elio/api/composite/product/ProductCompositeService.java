@@ -5,6 +5,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
+
+import static org.springframework.http.HttpStatus.ACCEPTED;
 
 @Tag(name = "ProductComposite", description = "REST API for composite product information.")
 public interface ProductCompositeService {
@@ -22,7 +25,7 @@ public interface ProductCompositeService {
             @ApiResponse(responseCode = "422", description = "${api.responseCodes.unprocessableEntity.description}")
     })
     @GetMapping(value = "/product-composite/{productId}", produces = "application/json")
-    ProductAggregate getProduct(@PathVariable int productId);
+    Mono<ProductAggregate> getProduct(@PathVariable int productId);
 
     /**
      * Sample usage:
@@ -39,10 +42,11 @@ public interface ProductCompositeService {
             @ApiResponse(responseCode = "400", description = "${api.responseCodes.badRequest.description}"),
             @ApiResponse(responseCode = "422", description = "${api.responseCodes.unprocessableEntity.description}")
     })
+    @ResponseStatus(ACCEPTED)
     @PostMapping(
             value = "/product-composite",
             consumes = "application/json")
-    void createProduct(@RequestBody ProductAggregate body);
+    Mono<Void> createProduct(@RequestBody ProductAggregate body);
 
     /**
      * Sample usage: "curl -X DELETE $HOST:$PORT/product-composite/1".
@@ -56,6 +60,7 @@ public interface ProductCompositeService {
             @ApiResponse(responseCode = "400", description = "${api.responseCodes.badRequest.description}"),
             @ApiResponse(responseCode = "422", description = "${api.responseCodes.unprocessableEntity.description}")
     })
+    @ResponseStatus(ACCEPTED)
     @DeleteMapping(value = "/product-composite/{productId}")
-    void deleteProduct(@PathVariable int productId);
+    Mono<Void> deleteProduct(@PathVariable int productId);
 }

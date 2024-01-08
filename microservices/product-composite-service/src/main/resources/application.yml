@@ -1,7 +1,10 @@
-server:
-  port: 7000
-  error:
-    include-message: always
+server.port: 7000
+server.error.include-message: always
+
+logging.level:
+  root: INFO
+  '[re.elio]': DEBUG
+
 app:
   product-service:
     host: localhost
@@ -12,15 +15,13 @@ app:
   review-service:
     host: localhost
     port: 7003
-logging:
-  level:
-    root: INFO
-    '[re.elio]': DEBUG
+
 springdoc:
   swagger-ui.path: /openapi/swagger-ui.html
   api-docs.path: /openapi/v3/api-docs
   packagesToScan: re.elio.microservices.composite.product
   pathsToMatch: /**
+
 api:
   common:
     version: 1.0.0
@@ -68,7 +69,6 @@ api:
         
         ## Negative product ids
         422 - An **Unprocessable Entity** error will be returned
-
     create-composite-product:
       description: Creates a composite product
       notes: |
@@ -78,7 +78,6 @@ api:
         # Expected error responses
         1. If a product with the same productId as specified in the posted information already exists,
            an **422 - Unprocessable Entity** error with a "duplicate key" error message will be returned
-
     delete-composite-product:
       description: Deletes a product composite
       notes: |
@@ -87,14 +86,42 @@ api:
         The implementation of the delete method is idempotent, i.e. it can be called several times with the same response.
 
         This means that a delete request of a non-existing product will return **200 Ok**.
+
+spring.cloud.stream:
+  defaultBinder: rabbit
+  default.contentType: application/json
+  bindings:
+    products-out-0:
+      destination: products
+      producer:
+        required-groups: auditGroup
+    recommendations-out-0:
+      destination: recommendations
+      producer:
+        required-groups: auditGroup
+    reviews-out-0:
+      destination: reviews
+      producer:
+        required-groups: auditGroup
+
+spring.rabbitmq:
+  host: 127.0.0.1
+  port: 5672
+  username: guest
+  password: guest
+
+spring.cloud.stream.kafka.binder:
+  brokers: 127.0.0.1
+  defaultBrokerPort: 9092
+
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+
 ---
 
-spring:
-  config:
-    activate:
-      on-profile: docker
-server:
-  port: 8080
+spring.config.activate.on-profile: docker
+server.port: 8080
+
 app:
   product-service:
     host: product
@@ -105,3 +132,30 @@ app:
   review-service:
     host: review
     port: 8080
+
+spring.rabbitmq.host: rabbitmq
+spring.cloud.stream.kafka.binder.brokers: kafka
+
+---
+
+spring.config.activate.on-profile: streaming_partitioned
+
+spring.cloud.stream.bindings.products-out-0.producer:
+  partition-key-expression: headers['partitionKey']
+  partition-count: 2
+
+spring.cloud.stream.bindings.recommendations-out-0.producer:
+  partition-key-expression: headers['partitionKey']
+  partition-count: 2
+
+spring.cloud.stream.bindings.reviews-out-0.producer:
+  partition-key-expression: headers['partitionKey']
+  partition-count: 2
+
+---
+
+spring.config.activate.on-profile: kafka
+management.health.rabbit.enabled: false
+spring.cloud.stream.defaultBinder: kafka
+spring.kafka.bootstrap-servers: kafka:9092
+spring.cloud.stream.kafka.binder.replication-factor: 1
