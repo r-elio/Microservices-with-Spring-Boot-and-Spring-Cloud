@@ -93,7 +93,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 
     @Override
     public Flux<Recommendation> getRecommendations(int productId) {
-        String url = String.format("%s/recommendation/?productId=%s", recommendationServiceURL, productId);
+        String url = String.format("%s/recommendation?productId=%s", recommendationServiceURL, productId);
         LOG.debug("Will call getRecommendations API on URL: {}", url);
         // Return an empty result if something goes wrong to make it possible
         // for the composite service to return partial responses
@@ -121,7 +121,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 
     @Override
     public Flux<Review> getReviews(int productId) {
-        String url = String.format("%s/review/?productId=%s", reviewServiceURL, productId);
+        String url = String.format("%s/review?productId=%s", reviewServiceURL, productId);
         LOG.debug("Will call getReviews API on URL: {}", url);
         // Return an empty result if something goes wrong to make it possible
         // for the composite service to return partial responses
